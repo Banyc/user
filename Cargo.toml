@@ -6,8 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-async-trait = "0.1"
-auth = { git = "https://github.com/Banyc/auth.git", rev = "e8e01f4420ca29e56ef2c4aeccb8bb449a2d5eda" }
+auth = { git = "https://github.com/Banyc/auth.git", rev = "53284adbff0529b1e37c6c68940b3d7a04763e62" }
 blake3 = "1"
 rand = "0.8"
 ron = "0.8"

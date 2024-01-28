@@ -1,10 +1,6 @@
 use std::sync::Arc;
 
-use async_trait::async_trait;
-use auth::{
-    password::Password,
-    session::{IdContext, IdSource},
-};
+use auth::{password::Password, session::IdContext};
 use serde::{Deserialize, Serialize};
 
 pub struct User {
@@ -90,11 +86,8 @@ impl SqliteUserSource {
             .expect("sqlite pool connect");
         Self { pool }
     }
-}
-#[async_trait]
-impl IdSource for SqliteUserSource {
-    type Id = User;
-    async fn id(&self, cx: &IdContext<'_>) -> Option<Self::Id> {
+
+    pub async fn id(&self, cx: &IdContext<'_>) -> Option<User> {
         let user = sqlite_read(&self.pool, cx.username).await?;
         if !user.password.matches(cx.password) {
             return None;

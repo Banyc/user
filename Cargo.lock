@@ -81,7 +81,7 @@ dependencies = [
 [[package]]
 name = "auth"
 version = "0.1.0"
-source = "git+https://github.com/Banyc/auth.git?rev=e8e01f4420ca29e56ef2c4aeccb8bb449a2d5eda#e8e01f4420ca29e56ef2c4aeccb8bb449a2d5eda"
+source = "git+https://github.com/Banyc/auth.git?rev=53284adbff0529b1e37c6c68940b3d7a04763e62#53284adbff0529b1e37c6c68940b3d7a04763e62"
 dependencies = [
  "async-trait",
  "axum",
@@ -1900,7 +1900,6 @@ checksum = "daf8dba3b7eb870caf1ddeed7bc9d2a049f3cfdfae7cb521b087cc33ae4c49da"
 name = "user"
 version = "0.1.0"
 dependencies = [
- "async-trait",
  "auth",
  "blake3",
  "rand",
