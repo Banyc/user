@@ -1,6 +1,10 @@
 use std::sync::Arc;
 
-use auth::password::Password;
+use async_trait::async_trait;
+use auth::{
+    password::Password,
+    session::{IdContext, IdSource},
+};
 use serde::{Deserialize, Serialize};
 
 pub struct User {
@@ -19,8 +23,8 @@ pub enum Role {
 pub async fn sqlite_write<'db>(
     executor: impl sqlx::Acquire<'db, Database = sqlx::Sqlite>,
     user: &User,
-) {
-    let mut executor = executor.acquire().await.expect("acquire executor");
+) -> Result<(), sqlx::Error> {
+    let mut executor = executor.acquire().await?;
 
     sqlx::query(
         r#"create table if not exists user (
@@ -30,8 +34,7 @@ role     text not null
 )"#,
     )
     .execute(&mut *executor)
-    .await
-    .expect("failed to create a table");
+    .await?;
 
     let username = user.username.as_ref();
     let password = ron::to_string(&user.password).expect("encode password");
@@ -44,8 +47,9 @@ values ( $1, $2, $3 )"#,
     .bind(&password)
     .bind(&role)
     .execute(&mut *executor)
-    .await
-    .expect("failed to insert");
+    .await?;
+
+    Ok(())
 }
 
 pub async fn sqlite_read<'db>(
@@ -74,6 +78,31 @@ pub async fn sqlite_read<'db>(
     }
 }
 
+/// Read user from sqlite
+#[derive(Debug, Clone)]
+pub struct SqliteUserSource {
+    pool: sqlx::SqlitePool,
+}
+impl SqliteUserSource {
+    pub async fn new(url: &str) -> Self {
+        let pool = sqlx::SqlitePool::connect(url)
+            .await
+            .expect("sqlite pool connect");
+        Self { pool }
+    }
+}
+#[async_trait]
+impl IdSource for SqliteUserSource {
+    type Id = User;
+    async fn id(&self, cx: &IdContext<'_>) -> Option<Self::Id> {
+        let user = sqlite_read(&self.pool, cx.username).await?;
+        if !user.password.matches(cx.password) {
+            return None;
+        }
+        Some(user)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use sqlx::{Connection, SqliteConnection};
@@ -88,7 +117,7 @@ mod tests {
             password: Password::generate("bar"),
             role: Role::Standard,
         };
-        sqlite_write(&mut conn, &u).await;
+        sqlite_write(&mut conn, &u).await.unwrap();
         let r_u = sqlite_read(&mut conn, "foo").await.unwrap();
         assert_eq!(u.username, r_u.username);
     }
