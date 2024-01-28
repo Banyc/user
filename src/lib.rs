@@ -16,7 +16,7 @@ pub enum Role {
     Guest,
 }
 
-pub async fn db_write<'db>(
+pub async fn sqlite_write<'db>(
     executor: impl sqlx::Acquire<'db, Database = sqlx::Sqlite>,
     user: &User,
 ) {
@@ -48,7 +48,7 @@ values ( $1, $2, $3 )"#,
     .expect("failed to insert");
 }
 
-pub async fn db_read<'db>(
+pub async fn sqlite_read<'db>(
     executor: impl sqlx::Acquire<'db, Database = sqlx::Sqlite>,
     username: &str,
 ) -> Option<User> {
@@ -88,8 +88,8 @@ mod tests {
             password: Password::generate("bar"),
             role: Role::Standard,
         };
-        db_write(&mut conn, &u).await;
-        let r_u = db_read(&mut conn, "foo").await.unwrap();
+        sqlite_write(&mut conn, &u).await;
+        let r_u = sqlite_read(&mut conn, "foo").await.unwrap();
         assert_eq!(u.username, r_u.username);
     }
 }
