@@ -81,11 +81,12 @@ dependencies = [
 [[package]]
 name = "auth"
 version = "0.1.0"
-source = "git+https://github.com/Banyc/auth.git?rev=c684670b4c4e072cd6b58a4cd00d1000fb25e9ab#c684670b4c4e072cd6b58a4cd00d1000fb25e9ab"
+source = "git+https://github.com/Banyc/auth.git?rev=9d72f0bb76578f9aed4bb186721cd1c337753df7#9d72f0bb76578f9aed4bb186721cd1c337753df7"
 dependencies = [
  "async-trait",
  "axum",
  "axum-extra",
+ "blake3",
  "maud",
  "rand",
  "serde",
