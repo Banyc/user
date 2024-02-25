@@ -8,13 +8,14 @@ pub mod ryzz;
 #[cfg(feature = "sqlx")]
 pub mod sqlx;
 
+#[derive(Debug, Clone)]
 pub struct User {
     pub username: Arc<str>,
     pub password: Password,
     pub role: Role,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Role {
     Admin,
     Standard,
