@@ -16,6 +16,10 @@ pub async fn sqlite_write(db: &Database, user: &User) -> Result<(), ryzz::Error>
         username: user.username.to_string(),
         password: ron::to_string(&user.password).expect("encode password"),
     };
+    db.delete_from(users)
+        .where_(eq(users.username, user.username.as_str()))
+        .rows_affected()
+        .await?;
     db.insert(users).values(user)?.rows_affected().await?;
     Ok(())
 }

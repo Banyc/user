@@ -18,6 +18,11 @@ password text not null
     .await?;
 
     let username = user.username.as_ref();
+    sqlx::query(r#"delete from user where username = $1"#)
+        .bind(username)
+        .execute(&mut *executor)
+        .await?;
+
     let password = ron::to_string(&user.password).expect("encode password");
     sqlx::query(
         r#"insert into user ( username, password )
