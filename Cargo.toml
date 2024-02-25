@@ -6,11 +6,19 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-auth = { git = "https://github.com/Banyc/auth.git", rev = "d46c875f6cd109b4385c5eaa6b10548541ae8984" }
+auth = { workspace = true }
 blake3 = "1"
 rand = "0.8"
 ron = "0.8"
-ryzz = { version = "0.2", optional = true }
+ryzz = { workspace = true, optional = true }
 serde = { version = "1", features = ["derive"] }
 sqlx = { version = "0.7", features = ["runtime-tokio", "sqlite"], optional = true }
+tokio = { workspace = true, features = ["full"] }
+
+[workspace]
+members = ["cli"]
+
+[workspace.dependencies]
+auth = { git = "https://github.com/Banyc/auth.git", rev = "d46c875f6cd109b4385c5eaa6b10548541ae8984" }
+ryzz = { version = "0.2" }
 tokio = { version = "1", features = ["full"] }

@@ -1,0 +1,12 @@
+[package]
+name = "user_cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+auth = { workspace = true }
+clap = { version = "4", features = ["derive"] }
+ryzz = { workspace = true }
+tokio = { workspace = true }
+user = { path = "../", features = ["ryzz"] }
