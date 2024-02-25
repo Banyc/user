@@ -8,7 +8,6 @@ struct DbUser {
     #[ryzz(pk)]
     username: String,
     password: String,
-    role: String,
 }
 
 pub async fn sqlite_write(db: &Database, user: &User) -> Result<(), ryzz::Error> {
@@ -16,7 +15,6 @@ pub async fn sqlite_write(db: &Database, user: &User) -> Result<(), ryzz::Error>
     let user = DbUser {
         username: user.username.to_string(),
         password: ron::to_string(&user.password).expect("encode password"),
-        role: ron::to_string(&user.role).expect("encode role"),
     };
     db.insert(users).values(user)?.rows_affected().await?;
     Ok(())
@@ -39,7 +37,6 @@ impl SqliteUserSource {
         let user = User {
             username: user.username.into(),
             password: ron::from_str(&user.password).expect("decode password"),
-            role: ron::from_str(&user.role).expect("decode role"),
         };
         if !user.password.matches(cx.password) {
             return None;
@@ -54,8 +51,6 @@ mod tests {
 
     use auth::password::Password;
 
-    use crate::Role;
-
     use super::*;
 
     #[tokio::test]
@@ -69,7 +64,6 @@ mod tests {
         let u = User {
             username: cx.username.into(),
             password: Password::generate(cx.password),
-            role: Role::Standard,
         };
         sqlite_write(&db, &u).await.unwrap();
         let reader = SqliteUserSource::new(db).await.unwrap();

@@ -11,8 +11,7 @@ pub async fn sqlite_write<'db>(
     sqlx::query(
         r#"create table if not exists user (
 username text primary key,
-password text not null,
-role     text not null
+password text not null
 )"#,
     )
     .execute(&mut *executor)
@@ -20,14 +19,12 @@ role     text not null
 
     let username = user.username.as_ref();
     let password = ron::to_string(&user.password).expect("encode password");
-    let role = ron::to_string(&user.role).expect("encode role");
     sqlx::query(
-        r#"insert into user ( username, password, role )
-values ( $1, $2, $3 )"#,
+        r#"insert into user ( username, password )
+values ( $1, $2 )"#,
     )
     .bind(username)
     .bind(&password)
-    .bind(&role)
     .execute(&mut *executor)
     .await?;
 
@@ -47,7 +44,6 @@ async fn sqlite_read<'db>(
     let user = User {
         username: user.username.into(),
         password: ron::from_str(&user.password).expect("decode password"),
-        role: ron::from_str(&user.role).expect("decode role"),
     };
     return Some(user);
 
@@ -56,7 +52,6 @@ async fn sqlite_read<'db>(
     struct DbUser {
         pub username: String,
         pub password: String,
-        pub role: String,
     }
 }
 
@@ -87,8 +82,6 @@ mod tests {
     use auth::password::Password;
     use sqlx::{Connection, SqliteConnection};
 
-    use crate::Role;
-
     use super::*;
 
     #[tokio::test]
@@ -97,7 +90,6 @@ mod tests {
         let u = User {
             username: "foo".into(),
             password: Password::generate("bar"),
-            role: Role::Standard,
         };
         sqlite_write(&mut conn, &u).await.unwrap();
         let r_u = sqlite_read(&mut conn, "foo").await.unwrap();
