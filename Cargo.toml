@@ -10,6 +10,7 @@ auth = { git = "https://github.com/Banyc/auth.git", rev = "fd9c32ff8dfb8a454a927
 blake3 = "1"
 rand = "0.8"
 ron = "0.8"
+ryzz = { version = "0.2", optional = true }
 serde = { version = "1", features = ["derive"] }
-sqlx = { version = "0.7", features = ["runtime-tokio", "sqlite"] }
+sqlx = { version = "0.7", features = ["runtime-tokio", "sqlite"], optional = true }
 tokio = { version = "1", features = ["full"] }
