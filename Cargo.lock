@@ -71,7 +71,7 @@ dependencies = [
 [[package]]
 name = "auth"
 version = "0.1.0"
-source = "git+https://github.com/Banyc/auth.git?rev=fd9c32ff8dfb8a454a927ecbd9270525b8e3d1bf#fd9c32ff8dfb8a454a927ecbd9270525b8e3d1bf"
+source = "git+https://github.com/Banyc/auth.git?rev=6a3e399995f322b009bc806dfa8646c7b1c5db89#6a3e399995f322b009bc806dfa8646c7b1c5db89"
 dependencies = [
  "async-trait",
  "axum",
