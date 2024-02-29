@@ -1,5 +1,9 @@
-use auth::session::IdContext;
+use auth::{
+    password::Password,
+    session::{ChangePasswordContext, IdContext},
+};
 use ryzz::*;
+use thiserror::Error;
 
 use crate::User;
 
@@ -47,13 +51,35 @@ impl SqliteUserSource {
         }
         Some(user)
     }
+
+    pub async fn change_password(
+        &self,
+        username: &str,
+        cx: &ChangePasswordContext<'_>,
+    ) -> Result<(), ChangePasswordError> {
+        let id_cx = IdContext {
+            username,
+            password: cx.old_password,
+        };
+        let Some(mut user) = self.id(&id_cx).await else {
+            return Err(ChangePasswordError::WrongOldPassword);
+        };
+        user.password = Password::generate(cx.new_password);
+        sqlite_write(&self.db, &user).await?;
+        Ok(())
+    }
+}
+#[derive(Debug, Error)]
+pub enum ChangePasswordError {
+    #[error("Wrong old password")]
+    WrongOldPassword,
+    #[error("{0}")]
+    Db(#[from] ryzz::Error),
 }
 
 #[cfg(test)]
 mod tests {
     use std::path::Path;
-
-    use auth::password::Password;
 
     use super::*;
 

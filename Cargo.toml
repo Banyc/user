@@ -13,12 +13,13 @@ ron = "0.8"
 ryzz = { workspace = true, optional = true }
 serde = { version = "1", features = ["derive"] }
 sqlx = { version = "0.7", features = ["runtime-tokio", "sqlite"], optional = true }
+thiserror = "1"
 tokio = { workspace = true, features = ["full"] }
 
 [workspace]
 members = ["cli"]
 
 [workspace.dependencies]
-auth = { git = "https://github.com/Banyc/auth.git", rev = "9990e8be0354a77884e6653dd8a78684b1ca4bce" }
+auth = { git = "https://github.com/Banyc/auth.git", rev = "96fc5f512c16431104adbcca00d712fb140c0488" }
 ryzz = { version = "0.2" }
 tokio = { version = "1", features = ["full"] }
