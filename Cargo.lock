@@ -125,18 +125,18 @@ dependencies = [
 [[package]]
 name = "auth"
 version = "0.1.0"
-source = "git+https://github.com/Banyc/auth.git?rev=96fc5f512c16431104adbcca00d712fb140c0488#96fc5f512c16431104adbcca00d712fb140c0488"
+source = "git+https://github.com/Banyc/auth.git?rev=b2adfca0393040ff045eaf168f9fd38dabbd6f61#b2adfca0393040ff045eaf168f9fd38dabbd6f61"
 dependencies = [
  "async-trait",
  "axum",
  "axum-client-ip",
  "axum-extra",
  "blake3",
+ "expiring_hash_map",
  "htmx_util",
  "maud",
  "rand",
  "serde",
- "session",
  "thiserror",
  "tokio",
 ]
@@ -524,6 +524,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0206175f82b8d6bf6652ff7d71a1e27fd2e4efde587fd368662814d6ec1d9ce0"
 
 [[package]]
+name = "expiring_hash_map"
+version = "0.1.0"
+source = "git+https://github.com/Banyc/expiring_hash_map.git?rev=5d23d32d8f26a7fd763986cb26e5793d63c04e6e#5d23d32d8f26a7fd763986cb26e5793d63c04e6e"
+
+[[package]]
 name = "fallible-iterator"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -894,9 +899,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "2.2.4"
+version = "2.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "967d6dd42f16dbf0eb8040cb9e477933562684d3918f7d253f2ff9087fb3e7a3"
+checksum = "7b0b929d511467233429c45a44ac1dcaa21ba0f5ba11e4879e6ed28ddb4f9df4"
 dependencies = [
  "equivalent",
  "hashbrown",
@@ -1506,15 +1511,6 @@ dependencies = [
  "itoa",
  "ryu",
  "serde",
-]
-
-[[package]]
-name = "session"
-version = "0.1.0"
-source = "git+https://github.com/Banyc/session.git?rev=65a1d6ef5358c953a5cf292ca93284904073ca50#65a1d6ef5358c953a5cf292ca93284904073ca50"
-dependencies = [
- "thiserror",
- "tokio",
 ]
 
 [[package]]
