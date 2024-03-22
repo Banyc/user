@@ -41,7 +41,14 @@ impl SqliteUserSource {
     }
 
     pub async fn id(&self, cx: &IdContext<'_>) -> Option<User> {
-        let user: DbUser = self.db.select(()).from(self.users).first().await.ok()?;
+        let user: DbUser = self
+            .db
+            .select(())
+            .from(self.users)
+            .where_(eq(self.users.username, cx.username))
+            .first()
+            .await
+            .ok()?;
         let user = User {
             username: user.username.into(),
             password: ron::from_str(&user.password).expect("decode password"),
