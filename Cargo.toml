@@ -19,6 +19,6 @@ tokio = { workspace = true, features = ["full"] }
 members = ["cli"]
 
 [workspace.dependencies]
-auth = { git = "https://github.com/Banyc/auth.git", tag = "v0.0.3" }
+auth = { git = "https://github.com/Banyc/auth.git", tag = "v0.0.4" }
 sqlx = "0.8"
 tokio = { version = "1", features = ["full"] }

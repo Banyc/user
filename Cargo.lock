@@ -125,7 +125,7 @@ dependencies = [
 [[package]]
 name = "auth"
 version = "0.1.0"
-source = "git+https://github.com/Banyc/auth.git?tag=v0.0.3#fa8d27bc3cb3319d9a641582863e5de2551041f5"
+source = "git+https://github.com/Banyc/auth.git?tag=v0.0.4#86b8c7924db32c549b93ab63ab70721ab20b6e78"
 dependencies = [
  "async-trait",
  "blake3",
