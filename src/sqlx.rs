@@ -63,8 +63,9 @@ pub async fn sqlite_read<'db>(
 
 #[cfg(test)]
 mod tests {
-    use auth::password::Password;
     use sqlx::{Connection, SqliteConnection};
+
+    use crate::password::Password;
 
     use super::*;
 

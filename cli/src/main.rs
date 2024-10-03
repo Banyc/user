@@ -1,7 +1,6 @@
-use auth::password::Password;
 use clap::Parser;
 use sqlx::Connection;
-use user::{sqlx::sqlite_write, User};
+use user::{password::Password, sqlx::sqlite_write, User};
 
 #[derive(Debug, Clone, Parser)]
 pub struct Cli {

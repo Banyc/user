@@ -5,7 +5,6 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1"
-auth = { workspace = true }
 clap = { version = "4", features = ["derive"] }
 sqlx = { workspace = true, features = ["runtime-tokio", "sqlite"] }
 tokio = { workspace = true }

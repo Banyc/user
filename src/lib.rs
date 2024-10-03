@@ -1,6 +1,8 @@
 use std::sync::Arc;
 
-use auth::password::Password;
+use password::Password;
+
+pub mod password;
 
 #[cfg(feature = "sqlx")]
 pub mod sqlx;
