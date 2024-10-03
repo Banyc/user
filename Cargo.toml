@@ -10,9 +10,8 @@ auth = { workspace = true }
 blake3 = "1"
 rand = "0.8"
 ron = "0.8"
-ryzz = { workspace = true, optional = true }
 serde = { version = "1", features = ["derive"] }
-sqlx = { version = "0.7", features = ["runtime-tokio", "sqlite"], optional = true }
+sqlx = { workspace = true, features = ["runtime-tokio", "sqlite"], optional = true }
 thiserror = "1"
 tokio = { workspace = true, features = ["full"] }
 
@@ -20,6 +19,6 @@ tokio = { workspace = true, features = ["full"] }
 members = ["cli"]
 
 [workspace.dependencies]
-auth = { git = "https://github.com/Banyc/auth.git", rev = "cd1344d3c470860b36a74e5692c4811d9616a7a8" }
-ryzz = { version = "0.2" }
+auth = { git = "https://github.com/Banyc/auth.git", tag = "v0.0.3" }
+sqlx = "0.8"
 tokio = { version = "1", features = ["full"] }

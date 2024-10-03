@@ -1,4 +1,4 @@
-use auth::session::IdContext;
+use sqlx::Acquire;
 
 use crate::User;
 
@@ -7,6 +7,7 @@ pub async fn sqlite_write<'db>(
     user: &User,
 ) -> Result<(), sqlx::Error> {
     let mut executor = executor.acquire().await?;
+    let mut tx = executor.begin().await?;
 
     sqlx::query(
         r#"create table if not exists user (
@@ -14,13 +15,13 @@ username text primary key,
 password text not null
 )"#,
     )
-    .execute(&mut *executor)
+    .execute(&mut *tx)
     .await?;
 
     let username = user.username.as_ref();
     sqlx::query(r#"delete from user where username = $1"#)
         .bind(username)
-        .execute(&mut *executor)
+        .execute(&mut *tx)
         .await?;
 
     let password = ron::to_string(&user.password).expect("encode password");
@@ -30,13 +31,14 @@ values ( $1, $2 )"#,
     )
     .bind(username)
     .bind(&password)
-    .execute(&mut *executor)
+    .execute(&mut *tx)
     .await?;
 
+    tx.commit().await?;
     Ok(())
 }
 
-async fn sqlite_read<'db>(
+pub async fn sqlite_read<'db>(
     executor: impl sqlx::Acquire<'db, Database = sqlx::Sqlite>,
     username: &str,
 ) -> Option<User> {
@@ -52,33 +54,10 @@ async fn sqlite_read<'db>(
     };
     return Some(user);
 
-    #[allow(unused)]
     #[derive(Debug, sqlx::FromRow)]
     struct DbUser {
         pub username: String,
         pub password: String,
-    }
-}
-
-/// Read user from sqlite
-#[derive(Debug, Clone)]
-pub struct SqliteUserSource {
-    pool: sqlx::SqlitePool,
-}
-impl SqliteUserSource {
-    pub async fn new(url: &str) -> Self {
-        let pool = sqlx::SqlitePool::connect(url)
-            .await
-            .expect("sqlite pool connect");
-        Self { pool }
-    }
-
-    pub async fn id(&self, cx: &IdContext<'_>) -> Option<User> {
-        let user = sqlite_read(&self.pool, cx.username).await?;
-        if !user.password.matches(cx.password) {
-            return None;
-        }
-        Some(user)
     }
 }
 

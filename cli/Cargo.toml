@@ -7,6 +7,6 @@ edition = "2021"
 anyhow = "1"
 auth = { workspace = true }
 clap = { version = "4", features = ["derive"] }
-ryzz = { workspace = true }
+sqlx = { workspace = true, features = ["runtime-tokio", "sqlite"] }
 tokio = { workspace = true }
-user = { path = "../", features = ["ryzz"] }
+user = { path = "../", features = ["sqlx"] }

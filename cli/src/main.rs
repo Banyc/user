@@ -1,7 +1,7 @@
 use auth::password::Password;
 use clap::Parser;
-use ryzz::Database;
-use user::{ryzz::sqlite_write, User};
+use sqlx::Connection;
+use user::{sqlx::sqlite_write, User};
 
 #[derive(Debug, Clone, Parser)]
 pub struct Cli {
@@ -16,11 +16,11 @@ pub struct Cli {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
-    let db = Database::new(&cli.db).await?;
+    let mut db = sqlx::SqliteConnection::connect(&cli.db).await?;
     let user = User {
         username: cli.username.into(),
         password: Password::generate(&cli.password),
     };
-    sqlite_write(&db, &user).await?;
+    sqlite_write(&mut db, &user).await?;
     Ok(())
 }
